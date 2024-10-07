@@ -1,0 +1,5 @@
+/usr/local/bin/MainApp
+/usr/local/lib/libMathFunctions.a
+/usr/local/lib/libStringUtilities.a
+/usr/local/lib/libMathFunctions.a
+/usr/local/lib/libStringUtilities.a
