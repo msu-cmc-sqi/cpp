@@ -1,0 +1,9 @@
+/home/proggirl/prac/task4/MultiModuleProject/install/lib/libMathFunctions.a
+/home/proggirl/prac/task4/MultiModuleProject/install/include/MathFunctions.h
+/home/proggirl/prac/task4/MultiModuleProject/install/lib/libStringUtilities.a
+/home/proggirl/prac/task4/MultiModuleProject/install/include/StringUtilities.h
+/home/proggirl/prac/task4/MultiModuleProject/install/bin/MainApp
+/home/proggirl/prac/task4/MultiModuleProject/install/lib/libMathFunctions.a
+/home/proggirl/prac/task4/MultiModuleProject/install/include/MathFunctions.h
+/home/proggirl/prac/task4/MultiModuleProject/install/lib/libStringUtilities.a
+/home/proggirl/prac/task4/MultiModuleProject/install/include/StringUtilities.h
