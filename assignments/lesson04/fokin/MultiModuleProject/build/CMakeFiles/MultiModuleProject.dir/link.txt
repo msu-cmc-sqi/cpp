@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/MultiModuleProject.dir/MainApp/main.cpp.o -o MultiModuleProject  MathFunctions/libMathFunctions.a StringUtilities/libStringUtilities.a 

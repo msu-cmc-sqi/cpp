@@ -1,0 +1,11 @@
+/home/sky/Документы/4 сем/C++/cpp/assignments/lesson04/fokin/MultiModuleProject/build/CMakeFiles/edit_cache.dir
+/home/sky/Документы/4 сем/C++/cpp/assignments/lesson04/fokin/MultiModuleProject/build/CMakeFiles/rebuild_cache.dir
+/home/sky/Документы/4 сем/C++/cpp/assignments/lesson04/fokin/MultiModuleProject/build/MathFunctions/CMakeFiles/MathFunctions.dir
+/home/sky/Документы/4 сем/C++/cpp/assignments/lesson04/fokin/MultiModuleProject/build/MathFunctions/CMakeFiles/edit_cache.dir
+/home/sky/Документы/4 сем/C++/cpp/assignments/lesson04/fokin/MultiModuleProject/build/MathFunctions/CMakeFiles/rebuild_cache.dir
+/home/sky/Документы/4 сем/C++/cpp/assignments/lesson04/fokin/MultiModuleProject/build/StringUtilities/CMakeFiles/StringUtilities.dir
+/home/sky/Документы/4 сем/C++/cpp/assignments/lesson04/fokin/MultiModuleProject/build/StringUtilities/CMakeFiles/edit_cache.dir
+/home/sky/Документы/4 сем/C++/cpp/assignments/lesson04/fokin/MultiModuleProject/build/StringUtilities/CMakeFiles/rebuild_cache.dir
+/home/sky/Документы/4 сем/C++/cpp/assignments/lesson04/fokin/MultiModuleProject/build/MainApp/CMakeFiles/MainApp.dir
+/home/sky/Документы/4 сем/C++/cpp/assignments/lesson04/fokin/MultiModuleProject/build/MainApp/CMakeFiles/edit_cache.dir
+/home/sky/Документы/4 сем/C++/cpp/assignments/lesson04/fokin/MultiModuleProject/build/MainApp/CMakeFiles/rebuild_cache.dir
