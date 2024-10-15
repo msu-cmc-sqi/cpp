@@ -1,0 +1,11 @@
+/Users/george/Documents/проекты/c-project/MultiModuleProject/build/CMakeFiles/edit_cache.dir
+/Users/george/Documents/проекты/c-project/MultiModuleProject/build/CMakeFiles/rebuild_cache.dir
+/Users/george/Documents/проекты/c-project/MultiModuleProject/build/MathFunctions/CMakeFiles/MathFunctions.dir
+/Users/george/Documents/проекты/c-project/MultiModuleProject/build/MathFunctions/CMakeFiles/edit_cache.dir
+/Users/george/Documents/проекты/c-project/MultiModuleProject/build/MathFunctions/CMakeFiles/rebuild_cache.dir
+/Users/george/Documents/проекты/c-project/MultiModuleProject/build/StringUtilities/CMakeFiles/StringUtilities.dir
+/Users/george/Documents/проекты/c-project/MultiModuleProject/build/StringUtilities/CMakeFiles/edit_cache.dir
+/Users/george/Documents/проекты/c-project/MultiModuleProject/build/StringUtilities/CMakeFiles/rebuild_cache.dir
+/Users/george/Documents/проекты/c-project/MultiModuleProject/build/MainApp/CMakeFiles/MainApp.dir
+/Users/george/Documents/проекты/c-project/MultiModuleProject/build/MainApp/CMakeFiles/edit_cache.dir
+/Users/george/Documents/проекты/c-project/MultiModuleProject/build/MainApp/CMakeFiles/rebuild_cache.dir
