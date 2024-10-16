@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/proggirl/prac/task4/MultiModuleProject/StringUtilities/StringUtilities.cpp
+StringUtilities.h
+/home/proggirl/prac/task4/MultiModuleProject/StringUtilities/StringUtilities.h
+iostream
+-
+algorithm
+-
+string
+-
+cctype
+-
+
+/home/proggirl/prac/task4/MultiModuleProject/StringUtilities/StringUtilities.h
+iostream
+-
+

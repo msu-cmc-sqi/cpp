@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/proggirl/prac/task4/MultiModuleProject/MathFunctions/MathFunctions.cpp
+MathFunctions.h
+/home/proggirl/prac/task4/MultiModuleProject/MathFunctions/MathFunctions.h
+
+/home/proggirl/prac/task4/MultiModuleProject/MathFunctions/MathFunctions.h
+
