@@ -2,7 +2,7 @@
 LDFLAGS=-lncurses -std=c++17
 
 snake: main.cpp
-	clang++ -o snake main.cpp $(LDFLAGS)
+	g++ -o snake main.cpp $(LDFLAGS)
 
 clean:
 	rm snake
