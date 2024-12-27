@@ -1,0 +1,12 @@
+cmake_minimum_required(VERSION 3.10)
+project(MultiModuleProject)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+option(BUILD_MATH_FUNCTIONS "Build MathFunctions library" ON)
+option(BUILD_STRING_UTILITIES "Build StringUtilities library" ON)
+
+add_subdirectory(MathFunctions)
+add_subdirectory(StringUtilities)
+add_subdirectory(MainApp)
