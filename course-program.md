@@ -25,7 +25,7 @@
 * Основные концепции ООП: классы, объекты, наследование, инкапсуляция, полиморфизм
 * Конструкторы и деструкторы
 * Наследование и виртуальные функции&#x20;
-* **Домашнее задание:**   [https://contest.cs.msu.ru/cgi-bin/new-client?contest\_id=612](https://contest.cs.msu.ru/cgi-bin/new-client?contest_id=612 )
+* **Домашнее задание:**   [https://contest.cs.msu.ru/cgi-bin/new-client?contest\_id=612](https://contest.cs.msu.ru/cgi-bin/new-client?contest_id=612)
 
 ## Урок 3: Современные возможности C++17 и работа с пространствами имен
 
@@ -36,14 +36,14 @@
 * Использование `#pragma once`
   **Практика:** написать модуль с функцией, подключаемый через header
 
-* **Домашнее задание:**  [https://contest.cs.msu.ru/cgi-bin/new-client?contest\_id=612 ](https://contest.cs.msu.ru/cgi-bin/new-client?contest_id=612 )
+* **Домашнее задание:**  [https://contest.cs.msu.ru/cgi-bin/new-client?contest\_id=612 ](https://contest.cs.msu.ru/cgi-bin/new-client?contest_id=612)
 
 ## Урок 4: Основы стандартной библиотеки + JSON
 
 * Контейнеры: `std::vector`, `std::map`, `std::set`
 * Стандартные алгоритмы: `std::sort`, `std::find`
 * Парсинг/генерация JSON (nlohmann/json)&#x20;
-* **Домашнее задание:**  [https://contest.cs.msu.ru/cgi-bin/new-client?contest\_id=612 ](https://contest.cs.msu.ru/cgi-bin/new-client?contest_id=612 )
+* **Домашнее задание:**  [https://contest.cs.msu.ru/cgi-bin/new-client?contest\_id=612 ](https://contest.cs.msu.ru/cgi-bin/new-client?contest_id=612)
 
 ---
 
