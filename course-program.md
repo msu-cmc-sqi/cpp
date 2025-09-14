@@ -25,7 +25,7 @@
 * Основные концепции ООП: классы, объекты, наследование, инкапсуляция, полиморфизм
 * Конструкторы и деструкторы
 * Наследование и виртуальные функции&#x20;
-* **Домашнее задание:**   [https://contest.cs.msu.ru/cgi-bin/new-client?contest\_id=612 ](https://contest.cs.msu.ru/cgi-bin/new-client?contest_id=612 )
+* **Домашнее задание:**   [https://contest.cs.msu.ru/cgi-bin/new-client?contest\_id=612](https://contest.cs.msu.ru/cgi-bin/new-client?contest_id=612 )
 
 ## Урок 3: Современные возможности C++17 и работа с пространствами имен
 
