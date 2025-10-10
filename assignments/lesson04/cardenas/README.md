@@ -31,12 +31,14 @@ make -j
 
 ### Output
 Ожидаемый вывод (примерно):  
-Имя игры                Рейтинг   Производитель         Категория      Жанр             Платформа    
+Имя игры        |       Рейтинг  | Производитель     |    Категория   |   Жанр        |     Платформа    
 The Legend of Zelda: BOTW   97      Nintendo              Adventure      Action RPG        Switch      
 Red Dead Redemption 2       97      Rockstar Games        Adventure      Action            PS4         
 The Witcher 3: Wild Hunt    93      CD Projekt Red        RPG            Fantasy           PC          
 Persona 5 Royal             95      Atlus                 RPG            JRPG              PS4         
-God of War (2018)           94      Santa Monica Studio   Action         Adventure         PS4  
+God of War (2018)           94      Santa Monica Studio   Action         Adventure         PS4    
+
+В терминале сохраняются пробелы и выглядет всё красивее, как таблица.
 
 ### Input
 Объясните коротко сюжет Elden Ring
