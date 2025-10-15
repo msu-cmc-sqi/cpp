@@ -1,0 +1,49 @@
+yurokpok@Yurokpok:~/prak/ai-agent/build$ ./ai_agent analyze ../examples/bad_cpp.cpp
+Code Analysis Report:
+=====================
+
+[error] Line 15
+Message: Отсутствует точка с запятой после объявления переменной x.
+Context: int x = 10
+---
+[error] Line 22
+Message: Выход за границы массива: обращение к arr[5] недопустимо, допустимые индексы 0-4.
+Context: arr[5] = 10;
+---
+[warning] Line 18
+Message: Потенциальная утечка памяти: выделенная память для ptr не освобождается с помощью delete.
+Context: int* ptr = new int(5);
+---
+[warning] Line 20
+Message: Возможное переполнение буфера: cin >> buffer может записать больше 9 символов (без учёта нуля-терминатора).
+Context: cin >> buffer;
+---
+[suggestion] Line 6
+Message: Рекомендуется явно объявить деструктор, копирующий конструктор и оператор присваивания для класса Test, если предполагается работа с ресурсами.
+Context: class Test { ... }
+---
+
+Summary: 2 errors, 2 warnings, 1 suggestions
+
+yurokpok@Yurokpok:~/prak/ai-agent/build$ ./ai_agent analyze ../examples/bad_python.py
+Code Analysis Report:
+=====================
+
+[error] Line 1
+Message: Используется синтаксис Python вместо C++ (def, двоеточия, отступы, функции, print). Код не скомпилируется.
+Context: def calculate_average(numbers):
+---
+[error] Line 8
+Message: Вызов функции calculate_average с пустым списком приведет к делению на ноль.
+Context: result1 = calculate_average([])
+---
+[error] Line 9
+Message: Вызов функции process_data с пустым списком приведет к попытке вызвать метод upper() у None.
+Context: result2 = process_data([])
+---
+[error] Line 11
+Message: Использование функции print с синтаксисом Python, отсутствует в C++.
+Context: print("Results:", result1, result2)
+---
+
+Summary: 4 errors, 0 warnings, 0 suggestions
