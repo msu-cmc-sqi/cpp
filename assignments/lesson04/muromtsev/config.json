@@ -1,0 +1,6 @@
+{
+  "host": "ai-api.hurated.com",
+  "port": "443",
+  "api_key": "api_key",
+  "history_path": "../history"
+}
