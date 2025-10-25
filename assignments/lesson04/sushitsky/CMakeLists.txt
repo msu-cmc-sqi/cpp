@@ -4,7 +4,10 @@ project(AiAgentExample LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# nlohmann/json для чтения config.json/prompt.json и формирования тела запроса
+# Ищем SQLite3
+find_library(SQLITE3_LIBRARY sqlite3)
+
+# nlohmann/json
 include(FetchContent)
 FetchContent_Declare(
   nlohmann_json
@@ -29,3 +32,12 @@ target_link_libraries(ai_agent
       OpenSSL::SSL
       OpenSSL::Crypto
 )
+
+# Добавляем SQLite3 после объявления цели
+if(SQLITE3_LIBRARY)
+    message(STATUS "Found SQLite3: ${SQLITE3_LIBRARY}")
+    target_link_libraries(ai_agent PRIVATE ${SQLITE3_LIBRARY})
+else()
+    message(WARNING "SQLite3 not found - context features will be disabled")
+    target_compile_definitions(ai_agent PRIVATE NO_SQLITE)
+endif()
