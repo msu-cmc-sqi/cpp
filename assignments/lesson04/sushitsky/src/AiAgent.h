@@ -2,11 +2,20 @@
 #include <string>
 #include <optional>
 #include <nlohmann/json.hpp>
+#include <sqlite3.h>
+#include <vector>
 
 struct AiConfig {
     std::string host;
     std::string port = "443";
     std::string api_key;
+};
+
+//Структура для хранения истории сообщений
+struct ChatMessage {
+    std::string role;    //"user" или "assistant"
+    std::string content;
+    std::string timestamp;
 };
 
 class AiAgent {
@@ -21,6 +30,9 @@ public:
         IDEAS,
         PLANNER
     };
+
+    AiAgent();
+    ~AiAgent();
 
     // Загрузить конфиг (host, port, api_key) из JSON-файла
     bool loadConfig(const std::string& path, std::string* err = nullptr);
@@ -49,6 +61,14 @@ public:
     void printCLIUsage() const;
     void runInteractiveMode();
 
+    //Методы для работы с контекстом/историей
+    bool enableContext(const std::string& session_id = "default");
+    bool disableContext();
+    bool saveToContext(const std::string& role, const std::string& content);
+    std::vector<ChatMessage> getContextHistory(int limit = 10) const;
+    bool clearContext();
+    std::string getCurrentSession() const { return current_session_; }
+
 private:
     // ---- низкоуровневые помощники ----
     static std::optional<std::string> httpsPostGenerate(
@@ -66,6 +86,11 @@ private:
     std::optional<std::string> executeCLICommand(const std::string& command, \
         std::string* outErr);
 
+    //Методы для работы с SQLite
+    bool initDatabase();
+    bool createTables();
+    void closeDatabase();
+
 private:
     AiConfig cfg_;
     std::string prompt_;
@@ -73,4 +98,10 @@ private:
     //CLI
     CLIMode cli_mode_ = CLIMode::DEFAULT;
     std::string original_prompt_;
+
+    //Контекст и база данных
+    sqlite3* db_ = nullptr;
+    bool context_enabled_ = false;
+    std::string current_session_;
+    std::string db_path_ = "chat_context.db";
 };

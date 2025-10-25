@@ -15,6 +15,29 @@
 
 using nlohmann::json;
 
+//Конструктор и деструктор
+AiAgent::AiAgent() {
+#ifdef NO_SQLITE
+    context_enabled_ = false;
+#else
+    db_ = nullptr;
+    context_enabled_ = false;
+    
+    // Устанавливаем абсолютный путь к базе данных в текущей директории
+    char cwd[1024];
+    if (getcwd(cwd, sizeof(cwd)) != nullptr) {
+        db_path_ = std::string(cwd) + "/chat_context.db";
+    } else {
+        db_path_ = "chat_context.db";  // fallback
+    }
+    std::cout << "Database path: " << db_path_ << std::endl;
+#endif
+}
+
+AiAgent::~AiAgent() {
+    closeDatabase();
+}
+
 // --------- utils IO ----------
 bool AiAgent::readWholeFile(const std::string& path, std::string& out, std::string* err) {
     std::ifstream f(path, std::ios::binary);
@@ -167,6 +190,183 @@ std::optional<std::string> AiAgent::ask(std::string* outErr) const {
 
 
 
+// ========== НОВЫЕ МЕТОДЫ ДЛЯ РАБОТЫ С КОНТЕКСТОМ ==========
+
+
+
+bool AiAgent::initDatabase() {
+    if (sqlite3_open(db_path_.c_str(), &db_) != SQLITE_OK) {
+        std::cerr << "Cannot open database: " << sqlite3_errmsg(db_) << \
+            std::endl;
+        return false;
+    }
+    return createTables();
+}
+
+bool AiAgent::createTables() {
+    const char* sql = "CREATE TABLE IF NOT EXISTS chat_history ("
+        "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "session_id TEXT NOT NULL,"
+        "role TEXT NOT NULL,"
+        "content TEXT NOT NULL,"
+        "timestamp DATETIME DEFAULT CURRENT_TIMESTAMP"
+        ");"
+        "CREATE INDEX IF NOT EXISTS idx_session ON chat_history(session_id);"
+        "CREATE INDEX IF NOT EXISTS idx_timestamp ON chat_history(timestamp);";
+    
+    char* errMsg = nullptr;
+    if (sqlite3_exec(db_, sql, nullptr, nullptr, &errMsg) != SQLITE_OK) {
+        std::cerr << "SQL error: " << errMsg << std::endl;
+        sqlite3_free(errMsg);
+        return false;
+    }
+    return true;
+}
+
+void AiAgent::closeDatabase() {
+    if (db_) {
+        sqlite3_close(db_);
+        db_ = nullptr;
+    }
+}
+
+bool AiAgent::enableContext(const std::string& session_id) {
+#ifdef NO_SQLITE
+    std::cout << "Context features disabled: SQLite3 not available" << std::endl;
+    return false;
+#else
+    current_session_ = session_id.empty() ? "default" : session_id;
+    
+    // Закрываем предыдущее соединение если было
+    closeDatabase();
+    
+    if (!initDatabase()) {
+        std::cerr << "Failed to initialize database for context" << std::endl;
+        return false;
+    }
+    
+    context_enabled_ = true;
+    std::cout << "✓ Context enabled for session: " << current_session_ << std::endl;
+    
+    // Проверяем, есть ли предыдущая история
+    auto history = getContextHistory(5);
+    if (!history.empty()) {
+        std::cout << "✓ Loaded " << history.size() << " previous messages" << std::endl;
+    }
+    
+    return true;
+#endif
+}
+
+bool AiAgent::disableContext() {
+    context_enabled_ = false;
+    closeDatabase();
+    std::cout << "Context disabled" << std::endl;
+    return true;
+}
+
+bool AiAgent::saveToContext(const std::string& role, const std::string& content) {
+#ifdef NO_SQLITE
+    return false;
+#else
+    if (!context_enabled_ || !db_) {
+        std::cerr << "Context not enabled or database not initialized" << std::endl;
+        return false;
+    }
+
+    const char* sql = "INSERT INTO chat_history (session_id, role, content) VALUES (?, ?, ?)";
+    sqlite3_stmt* stmt;
+    
+    if (sqlite3_prepare_v2(db_, sql, -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare statement: " << sqlite3_errmsg(db_) << std::endl;
+        return false;
+    }
+    
+    sqlite3_bind_text(stmt, 1, current_session_.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 2, role.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 3, content.c_str(), -1, SQLITE_STATIC);
+    
+    int result = sqlite3_step(stmt);
+    bool success = (result == SQLITE_DONE);
+    
+    if (!success) {
+        std::cerr << "Failed to save to context: " << sqlite3_errmsg(db_) << std::endl;
+    }
+    
+    sqlite3_finalize(stmt);
+    return success;
+#endif
+}
+
+std::vector<ChatMessage> AiAgent::getContextHistory(int limit) const {
+    std::vector<ChatMessage> history;
+#ifdef NO_SQLITE
+    return history;
+#else
+    if (!context_enabled_ || !db_) return history;
+
+    const char* sql = "SELECT role, content, timestamp FROM chat_history WHERE session_id = ? ORDER BY timestamp DESC LIMIT ?";
+    sqlite3_stmt* stmt;
+    
+    if (sqlite3_prepare_v2(db_, sql, -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare statement: " << sqlite3_errmsg(db_) << std::endl;
+        return history;
+    }
+    
+    sqlite3_bind_text(stmt, 1, current_session_.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_int(stmt, 2, limit);
+    
+    int step_result;
+    while ((step_result = sqlite3_step(stmt)) == SQLITE_ROW) {
+        ChatMessage msg;
+        const char* role_ptr = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+        const char* content_ptr = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+        const char* timestamp_ptr = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
+        
+        if (role_ptr) msg.role = role_ptr;
+        if (content_ptr) msg.content = content_ptr;
+        if (timestamp_ptr) msg.timestamp = timestamp_ptr;
+        
+        history.push_back(msg);
+    }
+    
+    if (step_result != SQLITE_DONE) {
+        std::cerr << "Error reading context: " << sqlite3_errmsg(db_) << std::endl;
+    }
+    
+    sqlite3_finalize(stmt);
+    
+    // Переворачиваем чтобы получить в хронологическом порядке
+    std::reverse(history.begin(), history.end());
+    return history;
+#endif
+}
+
+bool AiAgent::clearContext() {
+    if (!context_enabled_ || !db_) return false;
+
+    const char* sql = "DELETE FROM chat_history WHERE session_id = ?";
+    sqlite3_stmt* stmt;
+
+    if (sqlite3_prepare_v2(db_, sql, -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare statement: " << \
+            sqlite3_errmsg(db_) << std::endl;
+        return false;
+    }
+
+    sqlite3_bind_text(stmt, 1, current_session_.c_str(), -1, SQLITE_STATIC);
+
+    bool success = (sqlite3_step(stmt) == SQLITE_DONE);
+    sqlite3_finalize(stmt);
+
+    if (success) {
+        std::cout << "Context cleared for session: " << current_session_ << \
+            std::endl;
+    }
+
+    return success;
+}
+
 // ============== CLI ==================
 
 
@@ -217,10 +417,9 @@ void AiAgent::printCLIUsage() const {
     std::cout << "  ./ai_agent --cli --mode summary --file document.txt\n";
 }
 
-std::string AiAgent::buildPromptForCommand(const std::string& command, \
-CLIMode mode) const {
+std::string AiAgent::buildPromptForCommand(const std::string& command, CLIMode mode) const {
     std::string base_prompt = "Ты — универсальный CLI-помощник. Отвечай кратко, информативно и по делу. Адаптируй стиль под режим работы.";
-
+    
     std::string mode_prompt;
     switch (mode) {
         case CLIMode::HELP: mode_prompt = "Объясни команды и их использование."; break;
@@ -231,8 +430,21 @@ CLIMode mode) const {
         case CLIMode::PLANNER: mode_prompt = "Помоги составить план действий."; break;
         default: mode_prompt = "Ответь полезно и информативно."; break;
     }
-
-    return base_prompt + " " + mode_prompt + " Запрос: " + command;
+    
+    // УЛУЧШЕННЫЙ формат контекста
+    std::string context_str;
+    if (context_enabled_) {
+        auto history = getContextHistory(3); // берем только последние 3 сообщения для лучшего понимания
+        if (!history.empty()) {
+            context_str = "\n\nВАЖНО: Учитывай историю предыдущего разговора:\n";
+            for (const auto& msg : history) {
+                context_str += (msg.role == "user" ? "ПОЛЬЗОВАТЕЛЬ: " : "АССИСТЕНТ: ") + msg.content + "\n";
+            }
+            context_str += "\nТекущий запрос должен учитывать эту историю. Если пользователь ссылается на предыдущие сообщения, используй контекст для ответа.";
+        }
+    }
+    
+    return base_prompt + " " + mode_prompt + context_str + "\n\nТЕКУЩИЙ ЗАПРОС: " + command;
 }
 
 std::string AiAgent::readInputFile(const std::string& filepath) const {
@@ -279,14 +491,20 @@ command, std::string* outErr) {
     // Выполняем запрос
     auto result = ask(outErr);
 
+    //Сохраняем в контекст если включено
+    if (context_enabled_ && result) {
+        saveToContext("user", final_command);
+        saveToContext("assistant", *result);
+    }
+
     // Восстанавливаем промпт
     prompt_ = saved_prompt;
 
     return result;
 }
 
-std::optional<std::string> AiAgent::processCLICommand(int argc, char* argv[], \
-std::string* outErr) {
+std::optional<std::string> AiAgent::processCLICommand(int argc, char* argv[], std::string* outErr) {
+    // Обрабатываем флаги помощи
     for (int i = 2; i < argc; ++i) {
         std::string arg = argv[i];
         if (arg == "--help" || arg == "-h") {
@@ -295,36 +513,69 @@ std::string* outErr) {
         }
     }
 
+    // Если нет аргументов кроме --cli, переходим в интерактивный режим
     if (argc < 3) {
         runInteractiveMode();
         return "Interactive mode finished";
     }
-
+    
     std::string command;
-    bool has_command = false;
-
+    std::string file_for_summary;
+    
+    // Парсим аргументы
     for (int i = 2; i < argc; ++i) {
         std::string arg = argv[i];
-
+        
         if (arg == "--mode" && i + 1 < argc) {
-            setCLIMode(stringToMode(argv[++i]));
-        }
-        else if (arg == "--file" && i + 1 < argc) {
-            command = "--file" + std::string(argv[i + 1]);
-            i++;
-            has_command = true;
-        }
-        else if (arg != "--cli") {
+            setCLIMode(stringToMode(argv[i + 1]));
+            i++; // пропускаем следующий аргумент
+        } else if (arg == "--file" && i + 1 < argc) {
+            file_for_summary = argv[i + 1];
+            i++; // пропускаем следующий аргумент
+        } else if (arg == "--enable-context") {
+            if (i + 1 < argc && argv[i + 1][0] != '-') {
+                enableContext(argv[i + 1]);
+                i++;
+            } else {
+                enableContext();
+            }
+        } else if (arg == "--disable-context") {
+            disableContext();
+        } else if (arg == "--clear-context") {
+            clearContext();
+            return "Context cleared";
+        } else if (arg == "--show-context") {
+            auto history = getContextHistory();
+            if (history.empty()) {
+                return "No context history available";
+            }
+            std::string result = "Context history for session '" + current_session_ + "':\n";
+            for (const auto& msg : history) {
+                result += "[" + msg.timestamp + "] " + 
+                         (msg.role == "user" ? "Пользователь" : "Ассистент") + 
+                         ": " + msg.content + "\n";
+            }
+            return result;
+        } else if (arg != "--cli" && arg != "--help" && arg != "-h") {
             if (!command.empty()) command += " ";
             command += arg;
-            has_command = true;
         }
     }
-
-    if (has_command) {
-        return executeCLICommand(command, outErr);
+    
+    // Если есть файл для суммаризации, обрабатываем его
+    if (!file_for_summary.empty() && cli_mode_ == CLIMode::SUMMARY) {
+        std::string file_content = readInputFile(file_for_summary);
+        if (!file_content.empty()) {
+            command = "Суммаризируй следующий текст:\n" + file_content;
+        } else {
+            if (outErr) *outErr = "Cannot read file or file is empty: " + file_for_summary;
+            return std::nullopt;
+        }
     }
-    else {
+    
+    if (!command.empty()) {
+        return executeCLICommand(command, outErr);
+    } else {
         runInteractiveMode();
         return "Interactive mode finished";
     }
@@ -332,31 +583,78 @@ std::string* outErr) {
 
 void AiAgent::runInteractiveMode() {
     std::cout << "AI Agent CLI - Интерактивный режим\n";
-    std::cout << "Команды: 'quit' - выход, 'help' - справка, 'mode <режим>' - смена режима\n\n";
-
+    std::cout << "Команды: 'quit' - выход, 'help' - справка, 'mode <режим>' - смена режима\n";
+    if (context_enabled_) {
+        auto history = getContextHistory(5);
+        std::cout << "✓ Контекст включен для сессии: " << current_session_;
+        if (!history.empty()) {
+            std::cout << " (" << history.size() << " сообщений в истории)";
+        }
+        std::cout << "\n";
+    } else {
+        std::cout << "ℹ Контекст отключен. Используйте 'enable-context' для включения.\n";
+    }
+    std::cout << std::endl;
+    
     std::string input;
-    while(true) {
+    while (true) {
         std::cout << "[" << modeToString(cli_mode_) << "] > ";
         std::getline(std::cin, input);
-
+        
+        if (input.empty()) continue;
         if (input == "quit" || input == "exit") break;
-        if (input == "help") {
-            printCLIUsage();
+        if (input == "help") { 
+            printCLIUsage(); 
+            continue; 
+        }
+        if (input == "clear-context") {
+            if (clearContext()) {
+                std::cout << "✓ Контекст очищен\n";
+            } else {
+                std::cout << "✗ Ошибка очистки контекста\n";
+            }
+            continue;
+        }
+        if (input == "show-context") {
+            auto history = getContextHistory();
+            if (history.empty()) {
+                std::cout << "История контекста пуста\n";
+            } else {
+                std::cout << "История контекста (" << history.size() << " сообщений):\n";
+                for (const auto& msg : history) {
+                    std::cout << "[" << msg.timestamp << "] " 
+                             << (msg.role == "user" ? "Пользователь" : "Ассистент") 
+                             << ": " << msg.content << "\n";
+                }
+            }
+            continue;
+        }
+        if (input == "enable-context") {
+            if (enableContext()) {
+                std::cout << "✓ Контекст включен\n";
+            } else {
+                std::cout << "✗ Не удалось включить контекст\n";
+            }
+            continue;
+        }
+        if (input == "disable-context") {
+            disableContext();
+            std::cout << "✓ Контекст отключен\n";
             continue;
         }
         if (input.substr(0, 5) == "mode ") {
             setCLIMode(stringToMode(input.substr(5)));
-            std::cout << "Режим изменен на: " << modeToString(cli_mode_) << \
-            "\n";
+            std::cout << "✓ Режим изменен на: " << modeToString(cli_mode_) << "\n";
             continue;
         }
-
+        
         auto result = executeCLICommand(input, nullptr);
         if (result) {
             std::cout << *result << "\n";
-        }
-        else {
-            std::cout << "Ошибка выполнения команды\n";
+        } else {
+            std::cout << "✗ Ошибка выполнения команды\n";
         }
     }
+    
+    std::cout << "Интерактивный режим завершен.\n";
 }
