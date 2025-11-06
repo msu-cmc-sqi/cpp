@@ -1,0 +1,8 @@
+{
+    "host": "ai-api.hurated.com",
+    "port": "443",
+    "api_key": "your_key_here",
+    "yandex_music_token": "your_token_here",
+    "python_path": "python3",
+    "music_script_path": "yandex_music_client.py"
+}
