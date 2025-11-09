@@ -1,18 +1,27 @@
-#include "MLConsultant.hpp"
+#include "Programming-Mentor.hpp"
 #include <iostream>
 
-int main() {
-    MLC agent;
+int main(int argc, char **argv) {
+    PM agent;
     std::string err;
-    if (!agent.loadConfig("../config.json", &err)) {
-        std::cerr << "Config error: " << err << "\n";
-        return 1;
+    if (argc > 1) {
+        err.clear();
+        if (!agent.loadConfig(argv[1], &err)) {
+            std::cerr << "Config error: " << err << "\n";
+            return 1;
+        }
+    } else {
+        err.clear();
+        if (!agent.loadConfig("../config.json", &err)) {
+            std::cerr << "Config error: " << err << "\n";
+            return 1;
+        }
     }
     agent.printInfo();
     agent.userIntroduction(&err);
     std::string request = agent.getUserRequest(&err);
     while (request.size()) {
-        std::cout << agent.promptBuilder(request, &err) << std::endl;
+        agent.determineRequestType(request, &err);
         auto resp = agent.ask(&err);
         if (!resp) {
             std::cerr << "Request failed: " << err << "\n";
@@ -22,6 +31,6 @@ int main() {
         agent.saveHistory(resp, request);
         request = agent.getUserRequest(&err);
     }
-    agent.endSession();
+    agent.saveSession();
     return 0;
 }

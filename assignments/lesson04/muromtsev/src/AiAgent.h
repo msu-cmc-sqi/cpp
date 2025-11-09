@@ -8,6 +8,8 @@ struct AiConfig {
     std::string port = "443";
     std::string api_key;
     std::optional<std::string> history_path = std::nullopt;
+    std::optional<size_t> max_requests = std::nullopt;
+    std::optional<size_t> max_history_bytes = std::nullopt;
 };
 
 class AiAgent {

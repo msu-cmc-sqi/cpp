@@ -32,6 +32,8 @@ bool AiAgent::loadConfig(const std::string& path, std::string* err) {
         if (j.contains("port")) cfg_.port = j.at("port").get<std::string>();
         cfg_.api_key = j.at("api_key").get<std::string>();
         if (j.contains("history_path")) cfg_.history_path = j.at("history_path").get<std::string>();
+        if (j.contains("max_saved_requests")) cfg_.max_requests = j.at("max_saved_requests").get<size_t>();
+        if (j.contains("max_saved_bytes")) cfg_.max_history_bytes = j.at("max_saved_bytes").get<size_t>();
         return true;
     } catch (const std::exception& e) {
         if (err) *err = std::string("Config parse error: ") + e.what();

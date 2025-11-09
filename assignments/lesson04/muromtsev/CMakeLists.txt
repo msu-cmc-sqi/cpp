@@ -18,7 +18,7 @@ find_package(OpenSSL REQUIRED)
 
 add_executable(ai_agent
     src/AiAgent.cpp
-    src/MLConsultant.cpp
+    src/Programming-Mentor.cpp
     src/main.cpp
 )
 
