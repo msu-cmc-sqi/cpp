@@ -1,0 +1,8 @@
+{
+  "host": "ai-api.hurated.com",
+  "port": "443",
+  "api_key": "api_key",
+  "history_path": "history",
+  "max_saved_requests": 10,
+  "max_saved_bytes": 4096
+}
