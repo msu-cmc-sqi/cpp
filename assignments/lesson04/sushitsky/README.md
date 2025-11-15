@@ -79,3 +79,36 @@ cd ai_agent_example
 mkdir build && cd build
 cmake ..
 make -j
+
+## Создание сервера
+
+Либо запускаем скрипт, либо
+```bash
+rm -rf build
+cmake -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release -j$(nproc)
+./llama.cpp/build/bin/llama-server   -m llama.cpp/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf   -c 4096 -ngl 999   --host 127.0.0.1 --port 8080
+
+## Обращение к локальному серверу (из другого терминала)
+
+```bash
+curl -s http://127.0.0.1:8080/v1/chat/completions   -H "Content-Type: application/json"   -d '{
+    "model": "local-gguf",
+    "messages": [
+      {"role":"system","content":"You are a helpful coding assistant."},
+      {"role":"user","content":"Поясни в двух предложениях, что такое цикл в C++."}
+    ],
+    "max_tokens": 200,
+    "temperature": 0.7,
+    "top_p": 0.9
+  }' | jq -r '.choices[0].message.content'
+
+
+
+
+build/./ai_agent --cli --local "расскажи про искусственный интеллект в двух предложениях"
+
+# Тестируем удаленный API
+build/./ai_agent --cli --remote "расскажи про искусственный интеллект в двух предложениях"
+
+build/./ai_agent --cli --model-info

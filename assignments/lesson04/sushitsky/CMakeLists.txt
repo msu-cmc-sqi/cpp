@@ -41,3 +41,24 @@ else()
     message(WARNING "SQLite3 not found - context features will be disabled")
     target_compile_definitions(ai_agent PRIVATE NO_SQLITE)
 endif()
+
+
+
+# Ищем curl для HTTP запросов
+find_package(PkgConfig)
+pkg_check_modules(CURL libcurl)
+
+if(CURL_FOUND)
+    target_include_directories(ai_agent PRIVATE ${CURL_INCLUDE_DIRS})
+    target_link_libraries(ai_agent PRIVATE ${CURL_LIBRARIES})
+else()
+    # Ищем curl вручную
+    find_path(CURL_INCLUDE_DIR curl/curl.h)
+    find_library(CURL_LIBRARY curl)
+    if(CURL_INCLUDE_DIR AND CURL_LIBRARY)
+        target_include_directories(ai_agent PRIVATE ${CURL_INCLUDE_DIR})
+        target_link_libraries(ai_agent PRIVATE ${CURL_LIBRARY})
+    else()
+        message(WARNING "CURL not found - local HTTP mode will be disabled")
+    endif()
+endif()
