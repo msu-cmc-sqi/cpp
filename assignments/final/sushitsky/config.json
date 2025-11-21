@@ -1,0 +1,10 @@
+{
+  "model_type": "remote",
+  "local_http_host": "127.0.0.1",
+  "local_http_port": "8080",
+  "local_model_path": "/home/mikel/Prak5/Prak5/cpp/assignments/lesson04/ai_agent_example/llama.cpp/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf",
+  "local_model_n_ctx": 4096,
+  "host": "ai-api.hurated.com",
+  "port": "443",
+  "api_key": ""
+}
