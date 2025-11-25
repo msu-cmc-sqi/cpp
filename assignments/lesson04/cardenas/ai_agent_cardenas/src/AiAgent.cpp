@@ -141,7 +141,10 @@ std::optional<std::string> AiAgent::httpsPostGenerate(
     std::string text = extractTextFromJsonBody(response);
     if (text.empty()) {
         if (err) *err = "Cannot extract \"text\" from JSON response";
-        return std::nullopt;
+
+        text = "Время ожидания закончилось. Попробуйте ещё раз.";
+
+       // return std::nullopt;
     }
     return text;
 }
