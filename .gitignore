@@ -1,0 +1,10 @@
+.DS_Store
+build/
+cmake-build-*/
+.cache/
+.venv/
+*.gguf
+*.bin
+*.log
+config.json
+.env
