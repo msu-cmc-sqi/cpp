@@ -548,4 +548,4 @@ int main() {
 
 # Задание попрактиковаться
 
-[Перейти в контест](https://contest.cs.msu.ru/cgi-bin/new-client?contest_id=612) — Задачи: L02-*
+[Перейти в контест](https://contest.cs.msu.ru/cgi-bin/new-client?contest_id=669) — Задачи: L02-*
