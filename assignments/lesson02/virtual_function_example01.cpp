@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 
 class Animal {
 public:
@@ -24,14 +25,11 @@ public:
 };
 
 int main() {
-    Animal* a1 = new Dog();
-    Animal* a2 = new Cat();
+    std::unique_ptr<Animal> a1 = std::make_unique<Dog>();
+    std::unique_ptr<Animal> a2 = std::make_unique<Cat>();
 
     a1->speak();  // Вызывает Dog::speak
     a2->speak();  // Вызывает Cat::speak
-
-    delete a1;
-    delete a2;
 
     return 0;
 }
