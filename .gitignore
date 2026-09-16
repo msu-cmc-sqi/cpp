@@ -1,10 +1,9 @@
-.DS_Store
-build/
-cmake-build-*/
-.cache/
-.venv/
-*.gguf
-*.bin
+*.o
+*.obj
+*.exe
+*.out
+*.dll
 *.log
-config.json
+.DS_Store
 .env
+
