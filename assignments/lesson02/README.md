@@ -75,3 +75,5 @@ transforms.push_back(std::make_unique<LowercaseTransform>());
 - что произойдёт на пустом вводе и на граничных значениях.
 
 Принятое e-judge решение подтверждает совпадение результата с тестами, но не заменяет понимание программы.
+
+[Ссылка на контест](https://contest.cs.msu.ru/cgi-bin/new-client?contest_id=669)
