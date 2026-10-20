@@ -51,6 +51,18 @@ FORBIDDEN_FIND_OPTIONS = {
     "-delete",
 }
 
+FORBIDDEN_SHELL_TOKENS = {
+    "&&",
+    "||",
+    "|",
+    ";",
+    ">",
+    "<",
+    ">>",
+    "2>",
+    "2>>",
+}
+
 PROTECTED_PATHS = {
     ".env",
     "agent.py",
@@ -107,6 +119,16 @@ def run_command(command):
 
     if not args:
         return "ERROR: empty command"
+
+    for arg in args:
+        if arg in FORBIDDEN_SHELL_TOKENS or \
+        arg.startswith(">") or \
+        arg.startswith("<") or \
+        arg.startswith("2>"):
+            return (
+                f"ERROR: shell operator '{arg}' is not allowed. "
+                "Run commands one at a time."
+            )
 
     program = args[0]
 
@@ -244,9 +266,10 @@ messages = [
             "Use write_file when you need to modify a file. "
             "Call commands one at a time. "
             "Do not use shell operators such as &&, ;, |, > or <. "
+            "Executable programs may only be run from the build/ directory. "
             "Always verify changes by rebuilding or running tests."
         )
-    },
+    },  
     {
         "role": "user",
         "content": (
