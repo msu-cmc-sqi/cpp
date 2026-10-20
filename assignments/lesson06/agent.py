@@ -256,6 +256,11 @@ tools = [
 # Начальная история диалога
 # ----------------------------
 
+user_prompt = input("Что нужно сделать? ").strip()
+
+if not user_prompt:
+    raise RuntimeError("Задача не задана")
+
 messages = [
     {
         "role": "system",
@@ -269,14 +274,10 @@ messages = [
             "Executable programs may only be run from the build/ directory. "
             "Always verify changes by rebuilding or running tests."
         )
-    },  
+    },
     {
         "role": "user",
-        "content": (
-            "Собери этот C++ проект. "
-            "Если сборка не проходит, найди причину, исправь её "
-            "и проверь, что проект успешно собирается."
-        )
+        "content": user_prompt
     }
 ]
 
