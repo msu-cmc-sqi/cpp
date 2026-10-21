@@ -1,0 +1,24 @@
+# CMake и результаты компиляции
+build/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+
+# Исполняемые файлы
+*.exe
+*.dll
+*.obj
+*.pdb
+*.ilk
+
+# Файлы Visual Studio
+.vs/
+*.user
+*.suo
+
+# Локальные конфигурации
+config.json
+
+# Файлы моделей
+*.gguf
+*.safetensors
