@@ -8,18 +8,19 @@ C++17 CLI-клиент к `llama-server` (llama.cpp). Сценарий — **ч�
 
 ## Ноутбук
 
-- **ОС:** `<заполнить>` (например, Ubuntu 24.04)
-- **CPU:** `<заполнить>` (например, Intel Core i5-1135G7)
-- **RAM:** `<заполнить>` (например, 16 ГБ)
-- **GPU:** `<заполнить>` (например, нет / Intel Iris Xe, используется CPU-only запуск, `-ngl 0`)
+- **ОС:** `Arch Linux`
+- **CPU:** `AMD Ryzen 5 5600H with Radeon Graphics` 
+- **RAM:** `16 Gb`
+- **GPU:** `нет` 
 
 ## Модель и сервер
 
 - **Модель:** [Qwen2.5-0.5B-Instruct-GGUF](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF/tree/main)
 - **Файл:** `qwen2.5-0.5b-instruct-q4_k_m.gguf`
 - **Квантование:** `Q4_K_M` (~491 МБ)
-- **Версия сервера (`llama-server --version`):** `<заполнить>`
-- **Коммит llama.cpp (`git rev-parse HEAD`):** `<заполнить>`
+- **Версия сервера (`version: 0.7.0-dev (build 11784, commit 493253fe5)
+built with GNU 16.2.1 for Linux x86_64`):** 
+- **Коммит llama.cpp (`493253fe5a5af7e800b3c92a2452b5684a99e961`):** 
 
 Запуск сервера (в отдельном терминале, из каталога `llama.cpp`):
 
