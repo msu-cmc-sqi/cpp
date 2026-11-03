@@ -1,0 +1,15 @@
+{
+  "description": "Пример 3: Пограничные сценарии и обработка ошибок",
+  "case_empty_input": {
+    "input": "",
+    "client_output": "Ошибка: Введите непустую строку запроса",
+    "exit_code": 1
+  },
+  "case_server_offline": {
+    "server_status": "stopped",
+    "client_output": "Ошибка: Сервер недоступен. Проверьте запуск llama-server по адресу http://127.0.0.1:8080",
+    "exit_code": 1
+  },
+  "evaluation": "C++ клиент перехватывает ошибки ввода и сетевые сбои (CURLE_COULDNT_CONNECT, CURLE_OPERATION_TIMEDOUT), выводит понятные диагностические сообщения на русском языке и завершает процесс с ненулевым кодом 1."
+}
+
