@@ -5,6 +5,9 @@
 - [Урок 3 — возможности C++17](lesson03/README.md)
 - [Урок 4 — CMake, структура проекта и JSON](lesson04/README.md)
 - [Урок 5 — локальная LLM: llama.cpp, Hugging Face и HTTP](lesson05/README.md)
+- [Урок 6 — Coding Agent и Tool Calling](lesson06/README.md)
+- [Урок 7 — работа с OpenCode](lesson07/README.md)
+- [Урок 8 — итоговый проект с ИИ-агентом: темы, сдача и защита до 20 декабря](lesson08/README.md)
 
 Материалы следующих занятий будут добавляться по ходу курса.
 
