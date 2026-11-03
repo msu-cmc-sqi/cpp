@@ -1,0 +1,14 @@
+> Привет!
+Привет! Как я могу вам помочь сегодня?
+Вход: 57, ответ: 14, всего: 71 / 1024
+
+> Выпиши первые 10 чисел фибоначчи
+1, 2, 3, 5, 8, 13, 21, 34, 55
+Вход: 68, ответ: 30, всего: 98 / 1024
+
+> d;ofijsd;lkfbms;igsjdf;bksdfjb;osdifkbjsdfoifjsdofisuf;ksjdff;obisdjfb;oisdjb;sodifbjs;fkbjsd;bijsf;obisjb;fsjb;sofibjs;ibjs;bijfds;obisjd;boisjb;sidfjb;sdigjeds;gadfpojsd;fbjs;sjdpsdjf;osfdfjgsifjsieuhgsughsdlfiughslgshegsdhflsdfhgosdiigjds;oigidsjupogisdjfgoidsfhjbsoidhjsdlhdslisdjfg;oisjoisdjfosfhbsoibjrsoibjsdfigjse;roigeoigjsdbjeogejrosjb;dsfkbjse;origjsdffjs;dijsd;ojsd;jsdd;fojsddofisjdf;sjdf;ifdjf;osddjfiisjh;sdjg;osdfj;osdifhjsdhjs;dhjsd;ofjsd;ofgjsdifjsdoofijsodifjsodifjgsdifgjsidgjsdkfjs;oijsd;gijds;gsjgsfgpdsojpohspsdfgisjdfjkeshnglkfjgo;djhsigjdsogsjsdf;oisdjh;osdjsodifsdfbusoijsdokfgjsejrgs;rogkspdfogjds;lfkjds;ijdso;ofjd;fjsd;figj;fsdidsjfg;odsfjsdi;hjsd;figjsd;oijs;fojsdfigsdjf;sdifjg;sdifgjsd;fijfds;g
+Конечно, я могу помочь вам. Скажите, пожалуйста, что именно вам нужно.
+Вход: 459, ответ: 27, всего: 486 / 1024
+
+> hello 
+Ошибка: Сервер недоступен. Проверьте запуск llama-server и адрес http://127.0.0.1:8080/v1/chat/completions/input_tokens (после отключения сервера)
